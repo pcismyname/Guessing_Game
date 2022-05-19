@@ -5,24 +5,46 @@
 from tkinter import *
 import socket
 
-main_win = Tk()
-main_win.geometry("640x480")
-#main_win.resizable(0, 0)
-main_win.title("Guess Number")
+
+def exit_b(window):
+    window.destroy()
+    main_win.deiconify()
+    b_new_game["state"] = "normal"
+    b_score["state"] = "normal"
+
+
+def new_game():
+
+    b_new_game["state"] = "disable"
+    b_score["state"] = "disable"
+
+    game_win = Toplevel(main_win)
+    game_win.geometry("800x600")
+    game_win.resizable(0, 0)
+    game_win.title("game")
+    canvas_game = Canvas(game_win, width=640, height=480)
+    canvas_game.pack(fill="both", expand=True)
+    canvas_game.create_image(0,0, image=bg_main, anchor="nw")
+    canvas_game.create_rectangle(50, 120, 750, 450, fill="#7e3a95", outline='#7e3a95')
+
+    def reset():
+        game_win.destroy()
+        new_game()
+
 
 def score_board():
-
     main_win.iconify()
     f = open("scoreBoard.txt", "r")
     scoreList = f.read()
     f.close()
     score_window = Toplevel(main_win)
     score_window.title("Score")
-    score_window.geometry("480*640")
+    score_window.geometry("480x640")
     score_window.resizable(0, 0)
     canvas_score = Canvas(score_window, width=480, height=640)
     canvas_score.pack(fill="both",expand=True)
     canvas_score.create_image(0, 0, image=bg_score, anchor="nw")
+
 
 def hover_in(e):                                                          # Cursor over button effect / in
     e.widget["background"] = "#FA9F42"
@@ -35,9 +57,48 @@ def hover_out(e):                                                         # Curs
 def login():
     main_win.iconify()
 
+    def start_b():
+        global user_name
+        user_name = enter_name.get()
+        print(user_name)
+        login_window.destroy()
+        new_game()
+
+    login_window = Toplevel(main_win)
+    login_window.title("LOGIN")
+    login_window.geometry("400x250")
+    login_window.resizable(0, 0)
+    canvas_login = Canvas(login_window, width=400, height=250)
+    canvas_login.pack(fill="both", expand=True)
+    canvas_login.create_image(0, 0, image=bg_main, anchor="nw")
+
+    canvas_login.create_text(200, 40, text="Enter Your Name",
+                             fill="#d262f9", font="Times 26 bold",
+                             justify="center")
+    enter_name = Entry(canvas_login, width=16, font="Times 26 bold", justify="center", bg="#df91fa")
+    canvas_login.create_window(200, 100, window=enter_name)
+
+    b_start = Button(login_window, text="S T A R T", height=1, width=20, bg="#d262f9", relief="raised",  # Start
+                     activebackground="#7e3a95", command=start_b, state=NORMAL, font="Times 16")
+    b_exit_login = Button(login_window, text="EXIT", height=1, width=20, bg="#d262f9", relief="raised",  # Exit
+                          activebackground="#7e3a95", command=lambda: exit_b(login_window),
+                          state=NORMAL, font="Times 16")
+    b_start.place(x=200, y=170, anchor="center")
+    b_start.bind("<Enter>", hover_in)
+    b_start.bind("<Leave>", hover_out)
+
+    b_exit_login.place(x=200, y=220, anchor="center")
+    b_exit_login.bind("<Enter>", hover_in)
+    b_exit_login.bind("<Leave>", hover_out)
 
 
+main_win = Tk()
+main_win.geometry("640x480")
+main_win.resizable(0, 0)
+main_win.title("Guess Number")
 
+
+user_name = ""
 bg_main = PhotoImage(file="img/bg-math.png")
 bg_score = PhotoImage(file="img/score.png")
 bg_login = PhotoImage(file="img/login.png")
@@ -49,25 +110,24 @@ canvas_main.create_image(0,0, image=bg_main,anchor="nw")
 
 canvas_main.create_text(360, 60, text="Guess the Number", fill="#FA9F42",
                         font="Times 38 bold",justify="center",anchor="n")
-b_new_game = Button(canvas_main, text="N E W   G A M E", height=2, width=26, bg="#721817", relief="raised",  # New Game
+b_new_game = Button(canvas_main, text="NEW GAME", height=2, width=26, bg="#721817", relief="raised",
                     activebackground="#721817", command=login, state=NORMAL, font="Times 16 ")
-b_score = Button(canvas_main, text="S C O R E", height=2, width=26, bg="#721817", relief="raised",           # Score
+b_score = Button(canvas_main, text="SCORE", height=2, width=26, bg="#721817", relief="raised",
                  activebackground="#721817", command=score_board, state=NORMAL, font="Times 16")
-b_exit = Button(canvas_main, text="E X i T", height=2, width=26, bg="#721817", relief="raised",              # Exit
+b_exit = Button(canvas_main, text="EXIT", height=2, width=26, bg="#721817", relief="raised",
                 activebackground="#721817", command=main_win.destroy, state=NORMAL, font="Times 16")
-b_new_game.place(x=320, y=220, anchor="center")     # Button place
-b_new_game.bind("<Enter>", hover_in)                # Hover in / out
+
+
+b_new_game.place(x=320, y=220, anchor="center")
+b_new_game.bind("<Enter>", hover_in)
 b_new_game.bind("<Leave>", hover_out)
 
-b_score.place(x=320, y=290, anchor="center")        # Button place
-b_score.bind("<Enter>", hover_in)                   # Hover in / out
+b_score.place(x=320, y=290, anchor="center")
+b_score.bind("<Enter>", hover_in)
 b_score.bind("<Leave>", hover_out)
 
 b_exit.place(x=320, y=380, anchor="center")         # Button place
-b_exit.bind("<Enter>", hover_in)                    # Hover in / out
+b_exit.bind("<Enter>", hover_in)
 b_exit.bind("<Leave>", hover_out)
 
 main_win.mainloop()
-
-
-
