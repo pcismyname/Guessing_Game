@@ -26,10 +26,34 @@ def new_game():
     canvas_game.pack(fill="both", expand=True)
     canvas_game.create_image(0,0, image=bg_main, anchor="nw")
     canvas_game.create_rectangle(50, 120, 750, 450, fill="#7e3a95", outline='#7e3a95')
+    canvas_game.create_text(400, 50, text="Guess the Number", fill="#FA9F42",font="Times 18", anchor="n", justify="center")
+    attempt = canvas_game.create_text(60, 130, text="Attempt: 1", fill="#edc0fc",                       # Turn indicator
+                                      font="Times 18", justify="center", anchor="nw")
+    canvas_game.create_text(60, 160,text=("Player:"+user_name), fill="#FA9F42",
+            font="Times 18", anchor="nw")
+    server_print = canvas_game.create_text(400, 180, text="Guess Number in range\n1-20", fill="white",
+                                font="Times 34", justify="center", anchor="n")
+    
+    user_entry = Entry(game_win, width=4, font="Forte 26 bold", justify="center", bg="#df91fa")
+    canvas_game.create_window(400, 320,  window=user_entry)
+
+    b_submit = Button(game_win, text="S U B M I T", height=2, width=26, bg="#d262f9", relief="raised",  
+                      activebackground="#7e3a95", state=NORMAL, font="Forte 16", command=send_to_server)
+
+    b_submit.place(x=400, y=400, anchor="center")
+    b_submit.bind("<Enter>", hover_in)
+    b_submit.bind("<Leave>", hover_out)
 
     def reset():
         game_win.destroy()
         new_game()
+
+    def winner(_server_data):
+        canvas_game.itemconfig(server_print, text="You Won")
+
+    def send_to_server():
+        user_data = user_entry.get()
+
 
 
 def score_board():
@@ -73,7 +97,7 @@ def login():
     canvas_login.create_image(0, 0, image=bg_main, anchor="nw")
 
     canvas_login.create_text(200, 40, text="Enter Your Name",
-                             fill="#d262f9", font="Times 26 bold",
+                             fill="#FA9F42", font="Times 30 bold",
                              justify="center")
     enter_name = Entry(canvas_login, width=16, font="Times 26 bold", justify="center", bg="#df91fa")
     canvas_login.create_window(200, 100, window=enter_name)
@@ -108,13 +132,13 @@ canvas_main = Canvas(main_win, width=640, height=480)
 canvas_main.pack(fill="both", expand=True)
 canvas_main.create_image(0,0, image=bg_main,anchor="nw")
 
-canvas_main.create_text(360, 60, text="Guess the Number", fill="#FA9F42",
+canvas_main.create_text(320, 60, text="Guess the Number", fill="#FA9F42",
                         font="Times 38 bold",justify="center",anchor="n")
-b_new_game = Button(canvas_main, text="NEW GAME", height=2, width=26, bg="#721817", relief="raised",
+b_new_game = Button(canvas_main, text="NEW GAME", height=2, width=26, bg="#721817", relief="groove",
                     activebackground="#721817", command=login, state=NORMAL, font="Times 16 ")
-b_score = Button(canvas_main, text="SCORE", height=2, width=26, bg="#721817", relief="raised",
+b_score = Button(canvas_main, text="SCORE", height=2, width=26, bg="#721817", relief="groove",
                  activebackground="#721817", command=score_board, state=NORMAL, font="Times 16")
-b_exit = Button(canvas_main, text="EXIT", height=2, width=26, bg="#721817", relief="raised",
+b_exit = Button(canvas_main, text="EXIT", height=2, width=26, bg="#721817", relief="groove",
                 activebackground="#721817", command=main_win.destroy, state=NORMAL, font="Times 16")
 
 
