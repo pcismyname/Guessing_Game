@@ -27,8 +27,9 @@ def start_game():
                         font="Times 15 bold",justify="center",anchor=N)
         num = random.randint(1, 20)
         print("Random Number is", num)
-        canvas_main.create_text(60, 100+count*20, text="client connect", fill="#FA9F42",
-                        font="Times 15 bold",justify="center",anchor=N)
+        print(client.recv(2048).decode())
+
+    
         turn = 0
         count += 1
         while turn <= 5:
@@ -56,11 +57,11 @@ def start_game():
         print("Turn taken", turn)
 
 def hover_in(e):                                                         
-    e.widget["background"] = "#FA9F42"
+    e.widget["background"] = "#85B4F2"
 
 
 def hover_out(e):                                                         
-    e.widget["background"] = "#721817"
+    e.widget["background"] = "#7EA5F2"
 
 
 main_win = Tk()
@@ -72,10 +73,10 @@ canvas_main = Canvas(main_win, width=300, height=600,bg="black")
 canvas_main.pack(fill="both", expand=True)
 canvas_main.create_text(150, 15, text="Server", fill="#FA9F42",
                         font="Times 18 bold",justify="center",anchor="n")
-start_btn = Button(canvas_main,text="start",command=start_server, bg="#721817", relief="groove",
-                activebackground="#721817")
-stop_btn = Button(canvas_main,text="stop",command=stop_server, bg="#721817", relief="groove",
-                activebackground="#721817")
+start_btn = Button(canvas_main,text="start",command=start_server, bg="#7EA5F2", relief="groove",
+                activebackground="#85B4F2")
+stop_btn = Button(canvas_main,text="stop",command=stop_server, bg="#7EA5F2", relief="groove",
+                activebackground="#85B4F2")
 
 
 start_btn.place(x=125,y=50,anchor=NE)

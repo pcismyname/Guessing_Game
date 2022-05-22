@@ -5,6 +5,7 @@
 from tkinter import *
 import socket
 
+global tcpSocket
 
 def exit_b(window):
     window.destroy()
@@ -34,16 +35,18 @@ def new_game():
         f.close()
 
     def send_to_server():
+        tcpSocket.send(user_name.encode())
         user_data = user_entry.get()
         tcpSocket.send(user_data.encode())
         server_data = tcpSocket.recv(2048).decode()
         user_entry.delete(0, END)
+        print(server_data)
 
         if "Lost" in server_data:
             canvas_game.itemconfig(server_print, text="You Lost")
             b_submit.place_forget()
-            b_new_game_l = Button(game_win, text="N E W  G A M E", height=2, width=26, bg="#d262f9", relief="raised",
-                                  activebackground="#7e3a95", state=NORMAL, font="Forte 16", command=reset)
+            b_new_game_l = Button(game_win, text="N E W  G A M E", height=2, width=26, bg="#7EA5F2", relief="raised",
+                                  activebackground="#85B4F2", state=NORMAL, font="Times 16", command=reset)
             b_new_game_l.place(x=400, y=400, anchor="center")
         elif "Win" in server_data:
             winner(server_data)
@@ -69,27 +72,27 @@ def new_game():
     canvas_game = Canvas(game_win, width=640, height=480)
     canvas_game.pack(fill="both", expand=True)
     canvas_game.create_image(0,0, image=bg_main, anchor="nw")
-    canvas_game.create_rectangle(50, 120, 750, 450, fill="#7e3a95", outline='#7e3a95')
-    canvas_game.create_text(400, 50, text="Guess the Number", fill="#FA9F42",font="Times 18", anchor="n", justify="center")
-    attempt = canvas_game.create_text(60, 130, text="Attempt: 1", fill="#edc0fc",                       # Turn indicator
+    canvas_game.create_rectangle(50, 120, 750, 450, fill="#2881CE", outline='#7e3a95')
+    canvas_game.create_text(400, 50, text="Guess the Number", fill="white",font="Times 18", anchor="n", justify="center")
+    attempt = canvas_game.create_text(60, 130, text="Attempt: 1", fill="white",                       # Turn indicator
                                       font="Times 18", justify="center", anchor="nw")
-    canvas_game.create_text(60, 160,text=("Player:"+user_name), fill="#FA9F42",
+    canvas_game.create_text(60, 160,text=("Player: "+user_name), fill="white",
             font="Times 18", anchor="nw")
     server_print = canvas_game.create_text(400, 180, text="Guess Number in range\n1-20", fill="white",
                                 font="Times 34", justify="center", anchor="n")
     
-    user_entry = Entry(game_win, width=4, font="Times 26 bold", justify="center", bg="#df91fa")
+    user_entry = Entry(game_win, width=4, font="Times 26 bold", justify="center", bg="#BDF2F2")
     canvas_game.create_window(400, 320,  window=user_entry)
 
-    b_submit = Button(game_win, text="SUBMIT", height=2, width=26, bg="#d262f9", relief="raised",  
-                      activebackground="#7e3a95", state=NORMAL, font="Times 16", command=send_to_server)
+    b_submit = Button(game_win, text="SUBMIT", height=2, width=26, bg="#7EA5F2", relief="raised",  
+                      activebackground="#85B4F2", state=NORMAL, font="Times 16", command=send_to_server)
 
     b_submit.place(x=400, y=400, anchor="center")
     b_submit.bind("<Enter>", hover_in)
     b_submit.bind("<Leave>", hover_out)
 
-    b_exit_score = Button(game_win, text="EXIT", height=2, width=26, bg="#d262f9", relief="raised",    # Exit Button
-                          activebackground="#7e3a95", command=lambda:exit_b(game_win), state=NORMAL, font="Times 16")
+    b_exit_score = Button(game_win, text="EXIT", height=2, width=26, bg="#7EA5F2", relief="raised",    # Exit Button
+                          activebackground="#85B4F2", command=lambda:exit_b(game_win), state=NORMAL, font="Times 16")
 
     b_exit_score.place(x=400, y=530, anchor="center")
     b_exit_score.bind("<Enter>", hover_in)
@@ -131,11 +134,11 @@ def score_board():
 
 
 def hover_in(e):                                                         
-    e.widget["background"] = "#FA9F42"
+    e.widget["background"] = "#85B4F2"
 
 
 def hover_out(e):                                                         
-    e.widget["background"] = "#721817"
+    e.widget["background"] = "#7EA5F2"
 
 
 def login():
@@ -157,14 +160,14 @@ def login():
     canvas_login.create_image(0, 0, image=bg_main, anchor="nw")
 
     canvas_login.create_text(200, 40, text="Enter Your Name",
-                             fill="#FA9F42", font="Times 30 bold",
+                             fill="#BDF2F2", font="Times 30 bold",
                              justify="center")
-    enter_name = Entry(canvas_login, width=16, font="Times 26 bold", justify="center", bg="#df91fa")
+    enter_name = Entry(canvas_login, width=16, font="Times 26 bold", justify="center", bg="#BDF2F2")
     canvas_login.create_window(200, 100, window=enter_name)
 
-    b_start = Button(login_window, text="S T A R T", height=1, width=20, bg="#d262f9", relief="raised",  # Start
-                     activebackground="#7e3a95", command=start_b, state=NORMAL, font="Times 16")
-    b_exit_login = Button(login_window, text="EXIT", height=1, width=20, bg="#d262f9", relief="raised",  # Exit
+    b_start = Button(login_window, text="START", height=1, width=20, bg="#7EA5F2", relief="raised",  # Start
+                     activebackground="#85B4F2", command=start_b, state=NORMAL, font="Times 16")
+    b_exit_login = Button(login_window, text="EXIT", height=1, width=20, bg="#7EA5F2", relief="raised",  # Exit
                           activebackground="#7e3a95", command=lambda: exit_b(login_window),
                           state=NORMAL, font="Times 16")
     b_start.place(x=200, y=170, anchor="center")
@@ -192,14 +195,14 @@ canvas_main = Canvas(main_win, width=640, height=480)
 canvas_main.pack(fill="both", expand=True)
 canvas_main.create_image(0,0, image=bg_main,anchor="nw")
 
-canvas_main.create_text(320, 60, text="Guess the Number", fill="#FA9F42",
+canvas_main.create_text(320, 60, text="Guess the Number", fill="#BDF2F2",
                         font="Times 38 bold",justify="center",anchor="n")
-b_new_game = Button(canvas_main, text="NEW GAME", height=2, width=26, bg="#721817", relief="groove",
-                    activebackground="#721817", command=login, state=NORMAL, font="Times 16 ")
-b_score = Button(canvas_main, text="SCORE", height=2, width=26, bg="#721817", relief="groove",
-                 activebackground="#721817", command=score_board, state=NORMAL, font="Times 16")
-b_exit = Button(canvas_main, text="EXIT", height=2, width=26, bg="#721817", relief="groove",
-                activebackground="#721817", command=main_win.destroy, state=NORMAL, font="Times 16")
+b_new_game = Button(canvas_main, text="NEW GAME", height=2, width=26, bg="#7EA5F2", relief="groove",
+                    activebackground="#85B4F2", command=login, state=NORMAL, font="Times 16 ")
+b_score = Button(canvas_main, text="SCORE", height=2, width=26, bg="#7EA5F2", relief="groove",
+                 activebackground="#85B4F2", command=score_board, state=NORMAL, font="Times 16")
+b_exit = Button(canvas_main, text="EXIT", height=2, width=26, bg="#7EA5F2", relief="groove",
+                activebackground="#85B4F2", command=main_win.destroy, state=NORMAL, font="Times 16")
 
 
 b_new_game.place(x=320, y=220, anchor=CENTER)
