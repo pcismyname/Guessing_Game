@@ -5,8 +5,8 @@
 from tkinter import *
 import socket
 
-global tcpSocket
-
+user_name = ""
+  
 def exit_b(window):
     window.destroy()
     main_win.deiconify()
@@ -15,6 +15,7 @@ def exit_b(window):
 
 
 def new_game():
+
 
     def reset():
         game_win.destroy()
@@ -25,9 +26,8 @@ def new_game():
         turn = _server_data[-1]
         canvas_game.itemconfig(attempt, text=("Attempt: " + turn))
         b_submit.place_forget()
-
-        b_new_game_l = Button(game_win, text="N E W  G A M E", height=2, width=26, bg="#d262f9", relief="raised",
-                              activebackground="#7e3a95", state=NORMAL, font="Times 16", command=reset)
+        b_new_game_l = Button(game_win, text="NEW  GAME", height=2, width=26, bg="#7EA5F2", relief="raised",
+                              activebackground="#85B4F2", state=NORMAL, font="Times 16", command=reset)
         b_new_game_l.place(x=400, y=400, anchor="center")
         place_score = user_name+" "+turn+"\n\n"
         f = open("scoreBoard.txt", "a")
@@ -35,7 +35,6 @@ def new_game():
         f.close()
 
     def send_to_server():
-        tcpSocket.send(user_name.encode())
         user_data = user_entry.get()
         tcpSocket.send(user_data.encode())
         server_data = tcpSocket.recv(2048).decode()
@@ -45,7 +44,7 @@ def new_game():
         if "Lost" in server_data:
             canvas_game.itemconfig(server_print, text="You Lost")
             b_submit.place_forget()
-            b_new_game_l = Button(game_win, text="N E W  G A M E", height=2, width=26, bg="#7EA5F2", relief="raised",
+            b_new_game_l = Button(game_win, text="NEW  GAME", height=2, width=26, bg="#7EA5F2", relief="raised",
                                   activebackground="#85B4F2", state=NORMAL, font="Times 16", command=reset)
             b_new_game_l.place(x=400, y=400, anchor="center")
         elif "Win" in server_data:
@@ -98,10 +97,9 @@ def new_game():
     b_exit_score.bind("<Enter>", hover_in)
     b_exit_score.bind("<Leave>", hover_out)
 
-    tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)                               # Connection to socket
+
+    tcpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)   
     tcpSocket.connect(("127.0.0.1", 8000))
-
-
 
 
 def score_board():
@@ -118,14 +116,14 @@ def score_board():
     canvas_score.pack(fill="both",expand=True)
     canvas_score.create_image(0, 0, image=bg_score, anchor="nw")
 
-    canvas_score.create_text(240, 100, text="S C O R E\nB O A R D",
-                             fill="#d262f9", font="Times 30 bold",
+    canvas_score.create_text(240, 100, text="SCORE\nBOARD",
+                             fill="#7EA5F2", font="Times 30 bold",
                              justify="center")
     canvas_score.create_text(240, 240, text=scoreList,
                              fill="white", font="Forte 18",
                              justify="center", anchor="n")
-    b_exit_score = Button(score_window, text="E X i T", height=2, width=26, bg="#d262f9",
-                          relief="raised", activebackground="#7e3a95",
+    b_exit_score = Button(score_window, text="EXIT", height=2, width=26, bg="#7EA5F2",
+                          relief="raised", activebackground="#85B4F2",
                           command=lambda: exit_b(score_window), state=NORMAL, font="Times 16")
 
     b_exit_score.place(x=240, y=580, anchor="center")
@@ -165,9 +163,9 @@ def login():
     enter_name = Entry(canvas_login, width=16, font="Times 26 bold", justify="center", bg="#BDF2F2")
     canvas_login.create_window(200, 100, window=enter_name)
 
-    b_start = Button(login_window, text="START", height=1, width=20, bg="#7EA5F2", relief="raised",  # Start
+    b_start = Button(login_window, text="START", height=1, width=20, bg="#7EA5F2", relief="raised",  
                      activebackground="#85B4F2", command=start_b, state=NORMAL, font="Times 16")
-    b_exit_login = Button(login_window, text="EXIT", height=1, width=20, bg="#7EA5F2", relief="raised",  # Exit
+    b_exit_login = Button(login_window, text="EXIT", height=1, width=20, bg="#7EA5F2", relief="raised",  
                           activebackground="#7e3a95", command=lambda: exit_b(login_window),
                           state=NORMAL, font="Times 16")
     b_start.place(x=200, y=170, anchor="center")
@@ -188,8 +186,6 @@ main_win.title("Guess Number")
 user_name = ""
 bg_main = PhotoImage(file="img/bg-math.png")
 bg_score = PhotoImage(file="img/bg-score.png")
-bg_login = PhotoImage(file="img/login.png")
-bg_game = PhotoImage(file="img/game.png")
 
 canvas_main = Canvas(main_win, width=640, height=480)
 canvas_main.pack(fill="both", expand=True)

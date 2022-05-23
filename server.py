@@ -17,19 +17,22 @@ def stop_server():
 
 
 def start_game():
-    global tcpSocket
     count = 0
     while True:
         tcpSocket.listen(1)
         (client, (ip, port)) = tcpSocket.accept()
+
         print("connect")
-        canvas_main.create_text(60, 100+count*15, text="client connect", fill="#FA9F42",
-                        font="Times 15 bold",justify="center",anchor=N)
+        canvas_main.create_text(80, 100+count*25, text=f"client connected", fill="#BDF2F2",
+                    font="Times 15 bold",justify="center",anchor=N)
+       
         num = random.randint(1, 20)
         print("Random Number is", num)
-        print(client.recv(2048).decode())
+        canvas_main.create_text(280, 100+count*25, text=f"random is {num}", fill="#BDF2F2",
+                    font="Times 15 bold",justify="center",anchor=N)
+ 
 
-    
+
         turn = 0
         count += 1
         while turn <= 5:
@@ -65,13 +68,13 @@ def hover_out(e):
 
 
 main_win = Tk()
-main_win.geometry("300x600")
+main_win.geometry("350x600")
 main_win.resizable(0, 0)
 main_win.title("Server Monitor")
 
-canvas_main = Canvas(main_win, width=300, height=600,bg="black")
+canvas_main = Canvas(main_win, width=350, height=600,bg="black")
 canvas_main.pack(fill="both", expand=True)
-canvas_main.create_text(150, 15, text="Server", fill="#FA9F42",
+canvas_main.create_text(150, 15, text="Server", fill="#BDF2F2",
                         font="Times 18 bold",justify="center",anchor="n")
 start_btn = Button(canvas_main,text="start",command=start_server, bg="#7EA5F2", relief="groove",
                 activebackground="#85B4F2")
@@ -87,15 +90,4 @@ stop_btn.place(x=175,y=50,anchor=NW)
 stop_btn.bind("<Enter>", hover_in)
 stop_btn.bind("<Leave>", hover_out)
 
-
-
 main_win.mainloop()
-
-
-
-
-
-
-
-
-
